@@ -1,0 +1,24 @@
+<!-- Encabezado de pagina -->
+<div class="bg-primary-800 p-3 border-l-2 hidden lg:flex lg:items-center lg:justify-between border-gray-800 text-secondary-700 shadow">
+    <div class="bg-white font-semibold shadow border-l-4 border-secondary-700 w-max px-4 py-2 text-sm">
+        {{ dataService.ubicacionActual }}
+    </div>
+    <div class="flex items-center">
+        <div title="Stock minimo" *ngIf="dataService.stockAlert && authService.usuario.role !== 'ADMIN_ROLE'" class="flex items-center bg-white text-red-600 rounded border-t-4 border-red-600 shadow mr-3 p-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+            <p class="text-sm ml-1"> Alerta de stock </p>
+        </div>
+        <div title="Stock minimo" *ngIf="dataService.stockAlert && authService.usuario.role == 'ADMIN_ROLE'" routerLink="/dashboard/productos/alerta-stock" class="flex items-center bg-white text-red-600 rounded border-t-4 border-red-600 shadow cursor-pointer mr-3 p-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+            <p class="text-sm ml-1"> Alerta de stock </p>
+        </div>
+        <div title="Hay promociones activas" *ngIf="dataService.promocionesAlert && authService.usuario.role !== 'ADMIN_ROLE'" class="flex items-center bg-white text-orange-600 rounded border-t-4 border-orange-600 shadow mr-3 p-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            <p class="text-sm"> Promociones activas </p>
+        </div>
+        <div title="Hay promociones activas" *ngIf="dataService.promocionesAlert && authService.usuario.role == 'ADMIN_ROLE'" routerLink="/dashboard/productos/promociones" class="flex items-center bg-white text-orange-600 rounded border-t-4 border-orange-600 shadow cursor-pointer mr-3 p-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            <p class="text-sm"> Promociones activas </p>
+        </div>
+    </div>
+</div>

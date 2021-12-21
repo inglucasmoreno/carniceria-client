@@ -1,0 +1,130 @@
+<app-tarjeta-lista>
+    <div class="antialiased font-sans bg-white">
+        <div class="container mx-auto px-4 sm:px-8">
+            <div class="py-4">
+                <div class="flex items-center">
+                    <app-boton-regresar routerLink="/dashboard/productos"></app-boton-regresar>
+                    <div class="ml-2">
+                        <h2 class="text-2xl font-semibold leading-tight text-gray-600">
+                            Listado de promociones
+                        </h2>
+                        <p class='text-white font-semibold bg-secondary-800 px-2 py-1 rounded w-max text-xs mt-1'> Promociones activas </p>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center md:justify-between mt-2">
+                    <div class="my-2 flex sm:flex-row flex-col">
+                        <div class="flex items-center">
+                            <div class="block relative">
+                                <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+                                    <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500 hover:text-secondary-500 cursor-pointer">
+                                        <path
+                                            d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <input #txtDescripcion placeholder="Codigo o Descripción" (keyup)="filtrarDescripcion(txtDescripcion.value)" class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-2 overflow-x-auto">
+                    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                        <table class="min-w-full leading-normal">
+                            <thead>
+                                <tr>
+                                    <th (click)="ordenarPorColumna('codigo')" class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="cursor-pointer flex items-center focus:outline-none">
+                                            <span> Código </span>
+                                            <span class="ml-2">
+                                                <svg *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                                <svg *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                                <svg *ngIf="ordenar.columna != 'codigo'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th (click)="ordenarPorColumna('descripcion')" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="cursor-pointer flex items-center focus:outline-none">
+                                            <span> Descripción </span>
+                                            <span class="ml-2">
+                                                <svg *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                                <svg *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                                <svg *ngIf="ordenar.columna != 'descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th (click)="ordenarPorColumna('precio')" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="cursor-pointer flex w-max items-center focus:outline-none">
+                                            <span> Precio de venta </span>
+                                            <span class="ml-2">
+                                                <svg *ngIf="ordenar.columna == 'precio' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                                <svg *ngIf="ordenar.columna == 'precio' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                                <svg *ngIf="ordenar.columna != 'precio'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th (click)="ordenarPorColumna('precio_promocion')" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="cursor-pointer w-max flex focus:outline-none items-center justify-center">
+                                            <span>
+                                                Precio de promoción
+                                            </span>
+                                            <span class="ml-2">
+                                                <svg *ngIf="ordenar.columna == 'precio_promocion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                                <svg *ngIf="ordenar.columna == 'precio_promocion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                                <svg *ngIf="ordenar.columna != 'precio_promocion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="flex items-center justify-center focus:outline-none">
+                                            <span>
+                                                Eliminar                                              
+                                            </span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="animate__animated animate__fadeIn" *ngFor="let producto of productos | filtroPromociones:filtro.parametro:'true'| paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                                    <!-- Codigo -->
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
+                                        <p class="text-gray-700  whitespace-no-wrap font-semibold tracking-wider">
+                                            {{ producto.codigo }}
+                                        </p>
+                                    </td>
+                                    <!-- Descripcion -->
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <p class="text-gray-900 whitespace-no-wrap tracking-wider">
+                                            {{ producto.descripcion }}
+                                        </p>
+                                    </td>
+                                    <!-- Precio de venta -->
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap tracking-wider">
+                                            ${{ producto.precio | moneda}}
+                                        </p>
+                                    </td>
+                                    <!-- Precio de promocion -->
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
+                                        <p class="whitespace-no-wrap tracking-wider text-orange-600 w-max py-1 px-2 rounded font-semibold">
+                                            ${{ producto.precio_promocion | moneda}}
+                                        </p>
+                                    </td>
+                                    <!-- Estado -->
+                                    <td (click)="eliminarPromocion(producto._id)" title="Eliminar promoción" class="px-5 py-2 border-b border-gray-200 text-xs text-center">
+                                        <app-boton-tabla>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                        </app-boton-tabla>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+                            <pagination-controls nextLabel="Siguiente" previousLabel="Anterior" (pageChange)="paginaActual = $event"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-tarjeta-lista>

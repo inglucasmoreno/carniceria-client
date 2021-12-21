@@ -1,0 +1,165 @@
+<app-modal [showModal]=true *ngIf="showModal">
+    <div class="rounded">
+        <h1 class="bg-primary-800 text-white p-2 rounded-t text-xl"> Promoción de producto </h1>
+        <div *ngIf='producto.promocion === false'>
+            <div class="bg-white flex items-center mt-2 p-2">
+                <h1 class='font-semibold bg-gray-100 w-1/2 rounded border p-2 text-center border-gray-300 text-gray-700'> Precio de venta </h1>
+                <div class="border w-1/2 p-2 ml-2 font-semibold text-center text-gray-700 shadow rounded border-gray-200 focus:outline-none"> ${{ producto.precio | moneda }} </div>
+            </div>
+            <div class="bg-white flex items-center mt-2 p-2">
+                <h1 class='font-semibold bg-gray-100 w-1/2 rounded border p-2 text-center border-gray-300 text-gray-700'> Precio promoción </h1>
+                <input (keyup.enter)="activarPromocion()" [(ngModel)]="precioPromocion" type="number" placeholder="Nuevo precio" class="border w-1/2 p-2 ml-2 shadow rounded border-gray-200 focus:outline-none text-center">
+            </div>
+            <!-- Footer -->
+            <div class="flex p-4">
+                <button (click)="activarPromocion()" class="bg-secondary-800 text-white p-2 rounded shadow w-full focus:outline-none hover:bg-secondary-700"> Activar </button>
+                <button class="bg-gray-500 text-white p-2 rounded shadow w-full ml-4 focus:outline-none hover:bg-gray-400" (click)="showModal = false"> Cancelar </button>
+            </div>
+        </div>
+        <div *ngIf="producto.promocion === true" class="px-4 py-2">
+            <p class="bg-gray-100 border border-gray-300 p-2 font-semibold rounded text-gray-700"> Este producto tiene una promoción activa </p>
+            <p class="p-2 bg-orange-100 rounded border border-orange-200 w-max mt-2"> Precio de promoción: <span class="font-semibold"> ${{ producto.precio_promocion | moneda }} </span> </p>
+            <div class="flex mt-4">
+                <button (click)="eliminarPromocion()" class="bg-secondary-800 text-white p-2 rounded shadow w-full focus:outline-none hover:bg-secondary-700"> Eliminar </button>
+                <button class="bg-gray-500 text-white p-2 rounded shadow w-full ml-4 focus:outline-none hover:bg-gray-400" (click)="showModal = false"> Cancelar </button>
+            </div>
+        </div>
+    </div>
+</app-modal>
+
+<app-tarjeta-formulario>
+    <div *ngIf="producto">
+        <div class="p-4 flex justify-between items-center">
+            <h1 class="flex items-center text-gray-700">
+                <app-boton-regresar routerLink="/dashboard/productos"></app-boton-regresar>
+                <div class="flex flex-col ml-2">
+                    <span class="ml-2 text-xl text-gray-600"> Productos </span>
+                    <span *ngIf="producto.activo" class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded border-green-200 text-green-500 bg-green-100"> 
+                        Producto activo
+                    </span>
+                    <span *ngIf="!producto.activo" class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-red-500 bg-red-100 border-red-200"> 
+                        Producto inactivo
+                    </span>
+                </div>
+            </h1>
+            <div>
+                <app-boton-icono (click)="showModal = true" title="Promoción">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </app-boton-icono>
+                <app-boton-icono class="ml-2" title="Editar producto" [routerLink]="['/dashboard/productos/editar', producto._id]">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                </app-boton-icono>
+            </div>
+        </div>
+
+        <div>
+            <div class="border shadow p-4 bg-gray-100">
+                <h1 class="font-semibold text-gray-600"> DETALLES GENERALES </h1>
+            </div>
+
+            <div class="p-6">
+                <div class="flex items-center border shadow w-max border-gray-300 p-2 rounded mb-3">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-type"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+                    <div class='ml-1'>
+                        <span class="text-gray-600 text-sm"> Tipo de producto: </span>
+                        <span class="ml-1 font-semibold text-md"> {{ producto.tipo === 'Normal' ? 'Mercaderia' : producto.tipo }} </span>
+                    </div>
+                </div>
+                <div class="lg:flex lg:items-center">
+                    <div class="flex items-center border shadow border-gray-300 p-2 rounded">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+                        <div class='ml-2'>
+                            <span class="text-gray-600 text-sm"> Código del producto: </span>
+                            <span class="ml-1 font-semibold text-md"> {{ producto.codigo }} </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center">
+                    <div *ngIf="producto.tipo === 'Normal'" class="flex items-center border shadow w-max border-gray-300 p-2 rounded mb-3 mt-3">
+                        <div class="flex items-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            <div>
+                                <span class="text-sm text-gray-600"> Precio de costo: </span>
+                                <span class="ml-1 font-semibold text-md"> ${{ producto.precio_costo | moneda}} </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div [ngClass]="{'md:ml-2': producto.tipo === 'Normal'}" class="flex items-center border shadow w-max border-gray-300 p-2 rounded mb-3 mt-3">
+                        <div class="flex items-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            <div>
+                                <span class="text-sm text-gray-600"> Precio de venta: </span>
+                                <span class="ml-1 font-semibold text-md"> ${{ producto.precio | moneda}} </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center mb-3" *ngIf="producto.promocion">
+                    <div class="flex items-center border shadow w-max bg-orange-100 border-orange-200 p-2 rounded">
+                        <div class="flex items-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            <div>
+                                <span class="text-sm text-gray-600"> Precio de promoción: </span>
+                                <span class="ml-1 font-semibold text-md"> ${{ producto.precio_promocion | moneda}} </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="eliminarPromocion()" title="Eliminar promoción" class="p-2 bg-gray-100 rounded ml-2 border border-gray-200 shadow hover:text-secondary-700 cursor-pointer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center">
+                    <div *ngIf="producto.tipo === 'Normal'" class="flex items-center border shadow w-max border-gray-300 p-2 rounded mb-3">
+                        <div class="flex items-center">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-percent"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                            <div>
+                                <span class="text-sm text-gray-600"> Porcentaje de ganancia: </span>
+                                <span class="ml-1 font-semibold text-md"> {{ producto.porcentaje_ganancia | moneda}}% </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-gray-800 border shadow rounded text-sm">
+                    <h1 class="font-semibold bg-gray-100 border-b p-2"> Descripción </h1>
+                    <div class="p-2">
+                        <span class="text-sm"> {{ producto.descripcion }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="border shadow p-4 bg-gray-100">
+                <h1 class="font-semibold text-gray-600"> DETALLES DE STOCK </h1>
+            </div>
+
+            <div class="p-6">
+                <div *ngIf="producto.stock_minimo && producto.cantidad <= producto.cantidad_minima" class="flex">
+                    <div class="flex items-center border border-red-200 bg-red-100 rounded shadow py-2 px-4 mb-3">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell text-red-800"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span class="text-red-800 font-semibold ml-1"> Alerta de stock </span>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="flex items-center border rounded shadow bg-blue-100 border-blue-300 py-2 px-3">
+                        <span class="text-gray-600 text-sm"> Unidad de medida: </span>
+                        <span class="ml-1 rounded font-semibold text-md"> {{ producto.unidad_medida.descripcion }} </span>
+                    </div>
+                </div>
+                <div class="lg:flex lg:items-center mt-3">
+                    <div class="flex">
+                        <div class="border bg-green-100 border-green-300 rounded shadow py-2 px-3">
+                            <span class="text-gray-600 text-sm"> Stock actual: </span>
+                            <span class="rounded font-semibold text-md" [ngClass]="{ 'text-red-500' : producto.cantidad < 0, 'text-gray-900' : producto.cantidad >= 0}"> {{ producto.tipo === 'Normal' ? producto.cantidad : producto.cantidad.toFixed(2) }} </span>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div *ngIf="producto.stock_minimo" class="border bg-orange-100 border-orange-300 mt-2 lg:mt-0 rounded shadow py-2 px-3 lg:ml-4">
+                            <span class="text-gray-600 text-sm"> Stock minimo: </span>
+                            <span class="ml1 rounded font-semibold text-md"> {{ producto.tipo === 'Normal' ? producto.cantidad_minima : producto.cantidad_minima.toFixed(2) }} </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br>
+    </div>
+</app-tarjeta-formulario>

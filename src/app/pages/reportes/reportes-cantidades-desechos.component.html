@@ -1,0 +1,67 @@
+<app-modal [showModal]="showModal">
+    <div>
+        <h1 class="bg-gray-800 text-white p-2 rounded-t fotn-semibold text-center"> Busqueda realizada </h1>
+        <div class="lg:flex items-center mt-1 p-2">
+            <p class="border shadow border-gray-400 flex items-center text-sm justify-center rounded w-full lg:w-1/2 px-1 py-2 text-center font-semibold text-gray-800">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span class="ml-1" *ngIf="fechaDesde !== ''"> Desde el {{ fechaDesde | fechaSelector}} </span>
+                <span class="ml-1" *ngIf="fechaDesde === ''"> Desde el inicio </span>
+            </p>
+            <p class="border shadow border-gray-400 flex items-center text-sm justify-center rounded w-full lg:w-1/2 px-1 py-2 text-center lg:ml-1 mt-2 lg:mt-0 font-semibold text-gray-800">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span *ngIf="fechaHasta !== ''" class="ml-1"> Hasta el {{ fechaHasta | fechaSelector }} </span>
+                <span class="ml-1" *ngIf="fechaHasta == ''"> Hasta hoy </span>
+            </p>
+        </div>
+        <div class="p-2">
+            <p class="p-2 flex items-center justify-between bg-white w-full border-l-8 border-green-500 font-semibold text-green-600">
+                <span> Carne vendida </span>
+                <span> {{ totales.cantidad | moneda }} Kg </span>
+            </p>
+            <p class="p-2 flex items-center justify-between bg-white w-full border-l-8 border-red-500 font-semibold text-red-600 mt-2">
+                <span> Carne desechada </span>
+                <span> {{ totales.desechos | moneda }} Kg </span>
+            </p>
+        </div>
+        <div class="flex p-2">
+            <button (click)="showModal=!showModal" class="w-full focus:outline-none rounde text-sm font-semibold bg-gray-100 text-gray-800 hover:text-secondary-700 border border-gray-200 rounded shadow p-2"> Cerrar busqueda </button>
+        </div>
+    </div>
+</app-modal>
+<div class="flex justify-center mt-2">
+    <div class="bg-white w-11/12 lg:w-1/2 border border-gray-200 shadow">
+        <h1 class="p-2 flex items-center justify-self-start bg-gray-800 font-semibold rounded-t text-center">
+            <span class="text-white w-full"> Carne vendidad vs desechada </span>
+        </h1>
+        <div class="p-2 mt-2">
+            <p class="font-semibold flex items-center text-sm">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span class="ml-1"> Desde </span>
+            </p>
+            <input [(ngModel)]="fechaDesde" type="date" class="focus:outline-none border rounded p-2 w-full mt-2">
+
+            <p class="font-semibold flex items-center mt-3 text-sm">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span class="ml-1"> Hasta </span>
+            </p>
+            <input [(ngModel)]="fechaHasta" type="date" class="focus:outline-none border rounded p-2 w-full mt-2">
+            <div class="flex mt-3 items-center">
+                <button (click)="buscar()" class="flex items-center text-sm justify-center p-2 border rounded shadow border-gray-200 bg-gray-100 w-full mt-3 focus:outline-none hover:text-secondary-700 font-semibold text-gray-700"> 
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span class="ml-1"> Buscar </span>
+                </button>
+                <button routerLink="/dashboard/reportes" class="flex text-sm ml-2 items-center justify-center p-2 border rounded shadow border-gray-200 bg-gray-100 w-full mt-3 focus:outline-none hover:text-secondary-700 font-semibold text-gray-700"> 
+                    Regresar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="chart-wrsapper">
+        <canvas baseChart>
+
+        </canvas>
+    </div>
+</div>

@@ -1,0 +1,251 @@
+<app-modal [showModal]="showModal">
+    <div [ngClass]="{'border-red-500':elementoActual.tipo === 'Gasto', 'border-green-500':elementoActual.tipo === 'Ingreso'}" class="bg-white px-4 py-2 pb-4 rounded border-t-8 border-green-600">
+        <h1 class="text-xl text-gray-800"> Agregando un {{ elementoActual.tipo.toLowerCase() }} </h1>
+        <input (keyup.enter)="nuevoIngresoGasto()" type="text" [(ngModel)]="elementoActual.descripcion" placeholder="Descripción" class="py-2 px-2 border shadow rounded focus:outline-none mt-3 w-full">
+        <div class="flex items-center mt-2">
+            <input (keyup.enter)="nuevoIngresoGasto()" [(ngModel)]="elementoActual.monto" type="number" placeholder="Monto" min=0 class="py-2 px-2 border shadow rounded focus:outline-none mt-2 w-1/2">
+            <select [(ngModel)]="elementoActual.tipo" class="p-2 border shadow rounded mt-2 ml-2 w-1/2">
+                <option value="Gasto"> Gasto </option>
+                <option value="Ingreso"> Ingreso </option>
+            </select>
+        </div>
+        <div class="flex items-center">
+            <button (click)="nuevoIngresoGasto()" [ngClass]="{'bg-red-600 hover:bg-red-500':elementoActual.tipo === 'Gasto', 'bg-green-600 hover:bg-green-500':elementoActual.tipo === 'Ingreso'}" class="w-1/2 p-2 mt-3 text-sm font-semibold border shadow rounded text-white"> Agregar </button>
+            <button (click)="showModal = false" class="border w-1/2 text-sm font-semibold p-2 rounded shadow text-white mt-3 bg-gray-600 hover:bg-gray-500"> Cancelar </button>
+        </div>
+    </div>
+</app-modal>
+<div class="md:flex p-4">
+
+    <div class="w-full md:w-1/2 ">
+        <!-- Cierre de caja -->
+        <div class="bg-white border shadow rounded-t">
+            <div class="flex items-center p-2 justify-between rounded-t bg-primary-800">
+                <h1 class="text-white text-lg font-medium"> Cierre de caja </h1>
+            </div>
+            <div class="px-4 py-2">
+                <h4 class="font-semibold"> Saldo inicial </h4>
+                <div class="flex items-center">
+                    <div>
+                        <input (keyup)="calculo_monto_total()" type="number" [(ngModel)]="data.saldo_inicial" class="border te shadow rounded py-1 px-2 mt-2 focus:outline-none" placeholder="Ingresar saldo">
+                    </div>
+                    <button (click)="actualizarSaldoInicial()" class="bg-gray-100 flex items-center text-gray-600 hover:text-secondary-700 px-4 py-1 mt-2 ml-2 rounded border border-gray-300 font-semibold focus:outline-none"> 
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <span class="ml-1 text-sm"> Fijar </span>
+                    </button>
+                </div>
+            </div>
+            <div class="px-4 text-sm mt-2">
+                <p class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-xs font-semibold text-green-500"> (+) </span> Total balanza {{ data.total_anulacion_balanza > 0 ? 'sin anulaciones' : null }} </span>
+                    <span class="font-normal"> ${{ data.total_balanza | moneda }} </span>
+                </p>
+                <p *ngIf="data.total_anulacion_balanza > 0" class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-xs font-semibold text-red-500"> (+) </span> Total anulación balanza </span>
+                    <span class="font-normal text-red-500"> ${{ data.total_anulacion_balanza | moneda }} </span>
+                </p>
+                <p *ngIf="data.total_anulacion_balanza > 0" class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-xs font-semibold text-red-500"> (+) </span> Total balanza con anulaciones </span>
+                    <span class="font-normal text-red-500"> ${{ data.total_balanza + data.total_anulacion_balanza | moneda }} </span>
+                </p>
+                <p class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-xs font-semibold text-green-500"> (+) </span> Total mercaderia </span>
+                    <span class="font-normal"> ${{ data.total_mercaderia | moneda }} </span>
+                </p>
+                <p *ngIf="data.total_adicional_credito > 0" class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-xs font-semibold text-green-500"> (+) </span> Total adicional por credito </span>
+                    <span class="font-normal"> ${{ data.total_adicional_credito | moneda }} </span>
+                </p>
+                <p *ngIf="totalOtrosIngresos > 0" class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-xs font-semibold text-green-500"> (+) </span> Otros ingresos </span>
+                    <span class="font-normal"> ${{ totalOtrosIngresos | moneda }} </span>
+                </p>
+                <p *ngIf="totalOtrosGastos > 0" class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-xs font-semibold text-red-500"> (-) </span> Otros gastos </span>
+                    <span class="font-normal text-red-500"> -${{ totalOtrosGastos | moneda }} </span>
+                </p>
+                <p *ngIf="data.total_descuento > 0" class="flex items-center font-semibold  justify-between border-b p-2">
+                    <span> <span class="text-xs font-semibold text-red-500"> (-) </span> Total descuentos por sistema </span>
+                    <span class="font-normal text-red-500"> -${{ data.total_descuento | moneda }} </span>
+                </p>
+                <p class="flex items-center justify-between p-2 border font-semibold bg-gray-100 mb-2 mt-2">
+                    <span> Total en ventas </span>
+                    <span> ${{ (((data.total_ventas - data.total_descuento) + data.total_adicional_credito + totalOtrosIngresos) - totalOtrosGastos) | moneda }} </span>
+                </p>
+                <p class="flex items-center font-semibold justify-between border-b border-t p-2">
+                    <span> <span class="text-xs font-semibold text-green-500"> (+) </span> Saldo inicial </span>
+                    <span class="font-normal"> ${{ data.saldo_inicial | moneda }} </span>
+                </p>
+                <div (click)="showFormaPago = !showFormaPago" class="flex items-center justify-between font-semibold border-b p-2 hover:text-red-500 cursor-pointer">
+
+                    <div class="flex items-center">
+                        <span> <span class="text-xs font-semibold text-red-500"> (-) </span> Total postnet </span>
+                        <svg *ngIf="showFormaPago" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down mt-1 bg-gray-100 ml-2 border border-gray-200 text-gray-800"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <svg *ngIf="!showFormaPago" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up mt-1 bg-gray-100 ml-2 border border-gray-200 text-gray-800"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    </div>
+
+                    <span class="font-normal text-red-500"> -${{ data.total_postnet | moneda }} </span>
+                </div>
+                <div *ngIf="showFormaPago" class="font-semibold">
+                    <p class="flex items-center justify-between bg-red-100 text-red-500 border border-red-200 p-2">
+                        <span> Crédito </span>
+                        <span class="font-normal text-red-500"> -${{ data.total_credito | moneda }} </span>
+                    </p>
+                    <p class="flex items-center justify-between bg-red-100 text-red-500 border border-red-200 p-2">
+                        <span> Débito </span>
+                        <span class="font-normal text-red-500"> -${{ data.total_debito | moneda }} </span>
+                    </p>
+                    <p class="flex items-center justify-between bg-red-100 text-red-500 border border-red-200 p-2">
+                        <span> MercadoPago </span>
+                        <span class="font-normal text-red-500"> -${{ data.total_mercadopago | moneda }} </span>
+                    </p>
+                    <p class="flex items-center justify-between bg-red-100 text-red-500 border border-red-200 p-2">
+                        <span> Cuenta corriente </span>
+                        <span class="font-normal text-red-500"> -${{ data.total_cuenta_corriente | moneda }} </span>
+                    </p>
+                </div>
+                <p class="flex items-center justify-between p-2 border font-semibold bg-gray-100 mb-2 mt-2">
+                    <span> Total efectivo en caja (Sistema) </span>
+                    <span> ${{ data.efectivo_en_caja | moneda }} </span>
+                </p>
+                <div class="flex items-center justify-between p-2 font-semibold border bg-gray-100">
+                    <span> Total efectivo en caja (Real) </span>
+                    <span> ${{ (billetes.total_billetes) | moneda }} </span>
+                </div>
+                <p class="flex items-center justify-between p-2 border font-semibold bg-gray-100 mb-2 mt-2">
+                    <span> Tesoreria </span>
+                    <span> <input [(ngModel)]="data.tesoreria" type="number" placeholder="Ej. 15000" class="border bg-white rounded py-1 px-3 focus:outline-none text-center"></span>
+                </p>
+
+                <!-- <span> ${{ (data.efectivo_en_caja - data.tesoreria) | moneda }} </span> -->
+
+                <p class="flex items-center justify-between p-2 border font-semibold bg-gray-100 mb-2 mt-2">
+                    <span> Saldo inicial próxima caja </span>
+                    <span> ${{ (billetes.total_billetes - data.tesoreria) | moneda }} </span>
+                </p>
+
+                <button (click)="nuevaCaja()" class="p-2 border border-gray-200 shadow text-md bg-gray-100 text-gray-800 w-full my-2 rounded hover:text-secondary-700 focus:outline-none font-semibold"> 
+                    Completar
+                </button>
+            </div>
+        </div>
+
+        <!-- Control de billetes -->
+        <div class="w-full mt-4">
+            <div class="bg-white  border shadow rounded-t text-sm">
+                <h1 class="p-2 bg-primary-800 text-white rounded-t text-lg font-medium"> Control de billetes </h1>
+                <div class="p-2">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="font-semibold text-center">
+                                <td> Billetes </td>
+                                <td> Cantidad </td>
+                                <td> Total </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-center">
+                                <td class="font-semibold w-1/4"> $5 </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_5" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td class="w-1/4"> ${{ billetes.total_5 | moneda }} </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="font-semibold"> $10 </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_10" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td> ${{ billetes.total_10 | moneda }} </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="font-semibold"> $20 </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_20" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td> ${{ billetes.total_20 | moneda }} </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="font-semibold"> $50 </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_50" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td> ${{ billetes.total_50 | moneda }} </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="font-semibold"> $100 </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_100" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td> ${{ billetes.total_100 | moneda }} </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="font-semibold"> $200 </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_200" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td> ${{ billetes.total_200 | moneda }} </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="font-semibold"> $500 </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_500" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td> ${{ billetes.total_500 | moneda }} </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="font-semibold"> $1000 </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_1000" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td> ${{ billetes.total_1000 | moneda }} </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td class="font-semibold"> Monedas </td>
+                                <input (change)="calculo_billetes()" min=0 (keyup)="calculo_billetes()" [(ngModel)]="billetes.cantidad_monedas" type="number" value=0 placeholder="Cantidad" class="py-1 px-2 border rounded shadow focus:outline-none mt-1 w-1/3">
+                                <td> ${{ billetes.total_monedas | moneda }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4">
+                    <div class="flex items-center justify-between p-2 font-semibold border bg-gray-100">
+                        <span> Total efectivo en caja (Real) </span>
+                        <span> ${{ billetes.total_billetes | moneda }} </span>
+                    </div>
+                    <div [ngClass]="{'bg-green-100' : billetes.diferencia >= 0, 'bg-red-100' : billetes.diferencia < 0}" class="flex items-center justify-between p-2 font-semibold border mt-2 bg-red-100">
+                        <span> Diferencia con monto de sistema </span>
+                        <span [ngClass]="{'text-green-700' : billetes.diferencia >= 0, 'text-red-700' : billetes.diferencia < 0}"> ${{ billetes.diferencia | moneda }} </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Gastos e Ingresos -->
+    <div class="bg-white w-full md:w-1/2 border shadow md:ml-4 mt-2 md:mt-0 rounded-t h-full">
+        <div class="bg-primary-800 p-2 flex items-center justify-between">
+            <h1 class="text-white rounded-t text-lg font-medium"> Gastos e Ingresos </h1>
+            <button (click)="modalNuevoElemento()" class="bg-gray-100 mr-2 px-2 py-1 shadow rounded text-sm font-semibold hover:text-secondary-700 text-gray-800"> Nuevo elemento </button>
+        </div>
+        <div class="p-2" *ngIf="ingresos.length <= 0 && gastos.length <= 0">
+            <p class="text-gray-600"> No hay elementos activos </p>
+        </div>
+        <div *ngIf="ingresos.length > 0 || gastos.length > 0" class="mx-2 mb-2">
+            <div class="p-4">
+                <div *ngIf="ingresos.length > 0">
+                    <h1 class="py-1 px-3 border text-white text-sm font-semibold rounded bg-green-600 w-full"> Otros ingresos </h1>
+                    <div class="p-2">
+                        <p (click)="eliminarIngresoGasto(ingreso)" class="flex items-center justify-between p-2 rounded border-b hover:bg-green-100 cursor-pointer text-sm" *ngFor="let ingreso of ingresos">
+                            <span> {{ ingreso.descripcion }} </span>
+                            <span> ${{ ingreso.monto | moneda }}  </span>
+                        </p>
+                        <p class="flex items-center justify-between p-2 text-green-600 font-semibold text-sm">
+                            <span>  Total </span>
+                            <span> ${{ totalOtrosIngresos | moneda }}  </span>
+                        </p>
+                    </div>
+                </div>
+                <div *ngIf="gastos.length > 0">
+                    <h1 class="py-1 px-3 border text-white rounded bg-red-600 text-sm font-semibold w-full"> Otros gastos </h1>
+                    <div class="p-2">
+                        <p (click)="eliminarIngresoGasto(gasto)" class="flex items-center justify-between p-2 rounded border-b hover:bg-red-100 cursor-pointer text-sm" *ngFor="let gasto of gastos">
+                            <span> {{ gasto.descripcion }} </span>
+                            <span> ${{ gasto.monto | moneda }}  </span>
+                        </p>
+                        <p class="flex items-center justify-between p-2 mt-2 text-red-600 font-semibold text-sm">
+                            <span>  Total </span>
+                            <span> ${{ totalOtrosGastos | moneda }}  </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

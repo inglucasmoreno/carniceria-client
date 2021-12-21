@@ -1,0 +1,124 @@
+<app-tarjeta-formulario>
+    <div>
+
+        <!-- Encabezado de formulario -->
+        <app-encabezado-formulario titulo="Productos" subTitulo="Nuevo producto" dirRegresar="/dashboard/productos"></app-encabezado-formulario>
+
+        <!-- Cuerpo de formulario -->
+        <form [formGroup]="productoForm" class="px-5">
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Tipo de producto </div>
+                    <div class="bg-white my-2 flex">
+                        <select #txtTipo (change)="cambioTipo(txtTipo.value)" class="border border-gray-300 rounded p-1 py-2 w-full shadow text-sm">
+                            <option value="Normal"> Mercaderia </option>
+                            <option value="Balanza"> Balanza </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Estado </div>
+                    <div class="bg-white my-2 flex">
+                        <select formControlName="activo" class="border border-gray-300 rounded p-1 py-2 w-full shadow text-sm">
+                            <option value=true> Activo </option>
+                            <option value=false> Inactivo </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> Código
+                    </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input placeholder="Ej. 2000007" [maxlength]="digitos" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm" formControlName="codigo"></div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Descripción </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input placeholder="Ej. Carne molida" formControlName="descripcion" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Unidad de medida </div>
+                    <div class="bg-white my-2 flex">
+                        <select class="border rounded p-1 py-2 w-full shadow text-sm" formControlName="unidad_medida">
+                            <option value=""> Seleccionar unidad </option>
+                            <option *ngFor="let unidad of unidades | filtroUnidadMedida:'':'true'" [value]="unidad._id"> {{ unidad.descripcion }} </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Stock inicial </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input placeholder="Ej. 200" type="number" formControlName="cantidad" min="0" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> ¿Stock mínimo? </div>
+                    <div class="bg-white my-2 flex">
+                        <select (change)="stockMinimo = !stockMinimo" class="border rounded p-1 py-2 w-full shadow text-sm" formControlName="stock_minimo">
+                            <option value=false> No </option>
+                            <option value=true> Si </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Stock mínimo </div>
+                    <div *ngIf="stockMinimo" class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input type="number" placeholder="Ej. 20" min="0" formControlName="cantidad_minima" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
+                    <div *ngIf="!stockMinimo" class="border shadow p-2 my-2 text-gray-500 rounded bg-gray-100 text-sm">
+                        Sin stock mínimo
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> {{ tipo === 'Normal' ? 'Precio de costo ($)' : 'Precio de venta ($)' }} </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input (change)="actualizarPrecioVenta()" (keyup)="actualizarPrecioVenta()" type="number" placeholder="Ej. 2500" formControlName="precio_costo" step="1" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                </div>
+                <div class="w-full mx-2 flex-1">
+                    <div *ngIf="tipo === 'Normal'" class="w-full flex-1 svelte-1l8159u">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Precio de venta ($) </div>
+                        <div class="my-2 p-1 flex border border-gray-300 rounded shadow bg-gray-100">
+                            <div class="text-sm p-1 font-semibold text-gray-700"> ${{ precio_venta | moneda }} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="tipo === 'Balanza'" class="w-full flex-1 svelte-1l8159u">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Carne </div>
+                        <div class="bg-white my-2 flex">
+                            <select class="border border-gray-300 rounded p-1 py-2 w-full shadow text-sm" formControlName="carne">
+                                <option value='false'> No </option>
+                                <option value='true'> Si </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="tipo === 'Normal'" class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Porcentaje de ganancia (%) </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input (change)="actualizarPrecioVenta()" (keyup)="actualizarPrecioVenta()" type="number" placeholder="Ej. 40" formControlName="porcentaje_ganancia" step="1" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                </div>
+                <div class="w-full mx-2 flex-1"></div>
+            </div>
+        </form>
+        <div class="flex flex-col px-4 pb-4 lg:flex-row mt-2">
+            <div class="w-full mx-2 flex-1">
+                <app-boton-formulario (click)="crearProducto()">
+                    Crear producto
+                </app-boton-formulario>
+            </div>
+            <div class="w-full mx-2 flex-1">
+                <app-boton-formulario (click)="crearProducto()" routerLink="/dashboard/productos">
+                    Regresar
+                </app-boton-formulario>
+            </div>
+        </div>
+    </div>
+</app-tarjeta-formulario>

@@ -1,0 +1,53 @@
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+const base_url = environment.base_url;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ReportesService {
+
+  constructor(private http: HttpClient) {}
+  
+  // Ventas
+  ventas(
+      direccion: number = 1,
+      columna: string = 'descripcion',
+      data: any
+    ): Observable<any> {
+    return this.http.post(`${base_url}/reportes/ventas`, data ,{
+      params: {
+        direccion: String(direccion),
+        columna
+      },
+      headers: {'x-token': localStorage.getItem('token')}
+    })
+  }
+
+  // Productos
+  productos(
+      direccion: number = 1,
+      columna: string = 'descripcion',
+      data: any
+    ): Observable<any> {
+    return this.http.post(`${base_url}/reportes/productos`, data ,{
+      params: {
+        direccion: String(direccion),
+        columna
+      },
+      headers: {'x-token': localStorage.getItem('token')}
+    })
+  }
+
+  // Cantidades y Desechos - Carnes
+  getCantidadesDesechos(data: any): Observable<any> {
+    return this.http.post(`${base_url}/reportes/cantidades-desechos`, data ,{
+      headers: {'x-token': localStorage.getItem('token')}
+    })
+  }
+
+
+}

@@ -1,0 +1,271 @@
+<div class="md:flex p-4">
+    <div class="w-full md:w-1/2 bg-white h-full border-t-8 border-primary-800 rounded p-1 shadow">
+        <div *ngIf="cajas">
+            <div class="antialiased font-sans bg-white">
+                <div class="container mx-auto px-4 sm:px-8">
+                    <div class="py-2">
+                        <div class="xl:flex xl:items-center xl:justify-between">
+                            <div>
+                                <div class="flex items-center">
+                                    <div>
+                                        <app-boton-regresar routerLink="/dashboard/reportes"></app-boton-regresar>
+                                    </div>
+                                    <div class="ml-2">
+                                        <h2 class="font-semibold leading-tight text-2xl text-gray-700">
+                                            Reporte de cajas
+                                        </h2>
+                                        <p class='text-gray-600'> Total de cajas: {{ cajas.length }} </p>
+                                    </div>
+                                </div>
+                                <div class="md:flex md:items-center md:justify-between">
+                                    <div class="my-0 flex sm:flex-row flex-col">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                            <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                                <table class="min-w-full leading-normal">
+                                    <thead>
+                                        <tr>
+                                            <th (click)="ordenarPorColumna('createdAt')" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                <div class="cursor-pointer flex items-center focus:outline-none">
+                                                    <span> Fecha </span>
+                                                    <span class="ml-2">
+                                                        <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                                        <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                                        <svg *ngIf="ordenar.columna != 'createdAt'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th (click)="ordenarPorColumna('usuario_creacion')" class="px-5 py-3 w-max border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                <div class="cursor-pointer flex items-center focus:outline-none">
+                                                    <span>
+                                                        Usuario creador
+                                                    </span>
+                                                    <span class="ml-2">
+                                                        <svg *ngIf="ordenar.columna == 'usuario_creacion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                                        <svg *ngIf="ordenar.columna == 'usuario_creacion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                                        <svg *ngIf="ordenar.columna != 'usuario_creacion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr (click)="seleccionarCaja(caja._id)" class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let caja of cajas | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                                            <td class="px-5 py-2 border-b border-gray-200 text-sm">
+                                                <p class="text-gray-900 whitespace-no-wrap">
+                                                    {{ caja.createdAt | fecha }}
+                                                </p>
+                                            </td>
+                                            <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                                {{ caja.usuario_creacion }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="px-5 py-4 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+                                    <pagination-controls nextLabel="Siguiente" previousLabel="Anterior" (pageChange)="paginaActual = $event"></pagination-controls>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-full md:w-1/2 bg-white h-full md:ml-2 mt-2 md:mt-0 border-t-8 border-primary-800 rounded p-2 shadow">
+        <div *ngIf="!cajaSeleccionada">
+            <p class="text-gray-600 border shadow border-gray-200 rounded p-2 bg-gray-100 text-center">
+                Selecciona una caja de la lista para ver sus detalles
+            </p>
+        </div>
+        <div *ngIf="cajaSeleccionada">
+            <h1 class="font-semibold text-2xl text-gray-700"> Detalles de caja </h1>
+            <div class="text-sm border rounded p-2 mt-2 shadow">
+                <p class="font-semibold"> Fecha: <span class="font-normal"> {{ cajaSeleccionada.createdAt | fecha }} </span> </p>
+                <p class="font-semibold"> Usuario creador: <span class="font-normal text-sm"> {{ cajaSeleccionada.usuario_creacion }} </span> </p>
+            </div>
+            <div class="mt-2 text-sm">
+                <p class="font-semibold p-2 border-b flex items-center justify-between">
+                    <span>
+                        <span class="text-green-500"> (+) </span> Total balanza {{ cajaSeleccionada.total_anulacion_balanza > 0 ? 'sin anulaciones' : null }}
+                    </span>
+                    <span class="font-normal"> ${{ cajaSeleccionada.total_balanza | moneda}} </span>
+                </p>
+                <p *ngIf="cajaSeleccionada.total_anulacion_balanza > 0" class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-sm font-semibold text-red-500"> (+) </span> Total anulación balanza </span>
+                    <span class="font-normal text-red-500"> ${{ cajaSeleccionada.total_anulacion_balanza | moneda }} </span>
+                </p>
+                <p *ngIf="cajaSeleccionada.total_anulacion_balanza > 0" class="flex items-center font-semibold justify-between border-b p-2">
+                    <span> <span class="text-sm font-semibold text-red-500"> (+) </span> Total balanza con anulaciones </span>
+                    <span class="font-normal text-red-500"> ${{ cajaSeleccionada.total_balanza + cajaSeleccionada.total_anulacion_balanza | moneda }} </span>
+                </p>
+                <p class="font-semibold p-2 border-b flex items-center justify-between">
+                    <span>
+                        <span class="text-green-500"> (+) </span> Total mercaderia
+                    </span>
+                    <span class="font-normal"> ${{ cajaSeleccionada.total_mercaderia | moneda}} </span>
+                </p>
+                <p *ngIf="cajaSeleccionada.total_adicional_credito > 0" class="font-semibold p-2 border-b flex items-center justify-between">
+                    <span>
+                        <span class="text-green-500"> (+) </span> Total adicional por crédito
+                    </span>
+                    <span class="font-normal"> ${{ cajaSeleccionada.total_adicional_credito | moneda}} </span>
+                </p>
+                <div (click)="showIngresos = !showIngresos" *ngIf="cajaSeleccionada.otros_ingresos > 0" class="font-semibold p-2 hover:text-green-500 cursor-pointer border-b flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div>
+                            <span class="text-green-500"> (+) </span> Otros ingresos
+                        </div>
+                        <svg *ngIf="showIngresos" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down mt-1 bg-gray-100 ml-2 border border-gray-200 text-gray-800"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <svg *ngIf="!showIngresos" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up mt-1 bg-gray-100 ml-2 border border-gray-200 text-gray-800"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    </div>
+                    <span class="font-normal"> ${{ cajaSeleccionada.otros_ingresos | moneda}} </span>
+                </div>
+                <div *ngIf="showIngresos && otrosIngresos.length > 0">
+                    <p *ngFor="let ingreso of otrosIngresos" class="font-semibold pl-7 pr-2 py-2 bg-green-100 text-green-600 border border-green-200 flex items-center text-xs justify-between">
+                        <span> {{ ingreso.descripcion }} </span>
+                        <span class="font-normal text-sm"> ${{ ingreso.monto | moneda}} </span>
+                    </p>
+                </div>
+
+                <div class="font-semibold p-2 border-b flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div>
+                            <span class="text-red-500"> (-) </span> Total por descuentos
+                        </div>
+                    </div>
+                    <span class="font-normal text-red-500"> -${{ cajaSeleccionada.total_descuentos | moneda}} </span>
+                </div>
+                <div (click)="showGastos = !showGastos" *ngIf="cajaSeleccionada.otros_gastos > 0" class="font-semibold p-2 border-b hover:text-red-500 flex cursor-pointer items-center justify-between">
+                    <div class="flex items-center">
+                        <div>
+                            <span class="text-red-500"> (-) </span> Otros gastos
+                        </div>
+                        <svg *ngIf="showGastos" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down mt-1 bg-gray-100 ml-2 border border-gray-200 text-gray-800"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <svg *ngIf="!showGastos" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up mt-1 bg-gray-100 ml-2 border border-gray-200 text-gray-800"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    </div>
+                    <span class="font-normal text-red-500"> -${{ cajaSeleccionada.otros_gastos | moneda}} </span>
+                </div>
+                <div *ngIf="showGastos && otrosGastos.length > 0">
+                    <p *ngFor="let gasto of otrosGastos" class="font-semibold pl-7 pr-2 py-2 bg-red-100 text-red-600 border border-red-200 flex items-center text-xs justify-between">
+                        <span> {{ gasto.descripcion }} </span>
+                        <span class="font-normal text-sm text-red-500"> -${{ gasto.monto | moneda}} </span>
+                    </p>
+                </div>
+                <p class="flex items-center justify-between p-2 border font-semibold bg-gray-100 mb-2 mt-2">
+                    <span> Total en ventas </span>
+                    <span> ${{ (((cajaSeleccionada.total_ventas - cajaSeleccionada.total_descuentos) + cajaSeleccionada.total_adicional_credito + cajaSeleccionada.otros_ingresos) - cajaSeleccionada.otros_gastos) | moneda }} </span>
+                </p>
+                <p class="font-semibold p-2 border-b flex items-center justify-between border-t">
+                    <span>
+                        <span class="text-green-500"> (+) </span> Saldo inicial
+                    </span>
+                    <span class="font-normal"> ${{ cajaSeleccionada.saldo_inicial | moneda}} </span>
+                </p>
+                <div (click)="showFormaPago = !showFormaPago" class="font-semibold p-2 border-b flex items-center justify-between hover:text-red-500 cursor-pointer">
+                    <div class="flex items-center">
+                        <div>
+                            <span class="text-red-500"> (-) </span> Total postnet
+                        </div>
+                        <svg *ngIf="showFormaPago" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down mt-1 bg-gray-100 ml-2 border border-gray-200 text-gray-800"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <svg *ngIf="!showFormaPago" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up mt-1 bg-gray-100 ml-2 border border-gray-200 text-gray-800"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    </div>
+                    <span class="font-normal text-red-500"> -${{ cajaSeleccionada.total_postnet | moneda}} </span>
+                </div>
+                <div *ngIf="showFormaPago">
+                    <div class="font-semibold p-2 border-b flex items-center justify-between border border-red-200 bg-red-100 text-red-500">
+                        <span> Crédito </span>
+                        <span class="font-normal text-red-500"> -${{ cajaSeleccionada.total_credito | moneda}} </span>
+                    </div>
+                    <div class="font-semibold p-2 border-b flex items-center justify-between border border-red-200 bg-red-100 text-red-500">
+                        <span> Débito </span>
+                        <span class="font-normal text-red-500"> -${{ cajaSeleccionada.total_debito | moneda}} </span>
+                    </div>
+                    <div class="font-semibold p-2 border-b flex items-center justify-between border border-red-200 bg-red-100 text-red-500">
+                        <span> MercadoPago </span>
+                        <span class="font-normal text-red-500"> -${{ cajaSeleccionada.total_mercadopago | moneda}} </span>
+                    </div>
+                    <div class="font-semibold p-2 border-b flex items-center justify-between border border-red-200 bg-red-100 text-red-500">
+                        <span> Cuenta corriente </span>
+                        <span class="font-normal text-red-500"> -${{ (cajaSeleccionada.total_cuenta_corriente ? cajaSeleccionada.total_cuenta_corriente : 0) | moneda}} </span>
+                    </div>
+                </div>
+                <p class="font-semibold p-2 border-b flex items-center justify-between bg-gray-100">
+                    <span> Efectivo en caja (Sistema) </span>
+                    <span> ${{ cajaSeleccionada.total_efectivo | moneda}} </span>
+                </p>
+                <div (click)="showBilletes = !showBilletes" class="font-semibold p-2 border-b flex items-center hover:text-yellow-600 cursor-pointer justify-between bg-gray-100">
+                    <div class="flex items-center">
+                        <span> Efectivo en caja (Real) </span>
+                        <svg *ngIf="showBilletes" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down mt-1 bg-white ml-2 border border-gray-200 text-gray-800"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <svg *ngIf="!showBilletes" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up mt-1 bg-white ml-2 border border-gray-200 text-gray-800"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    </div>
+                    <span> ${{ cajaSeleccionada.total_efectivo_real | moneda}} </span>
+                </div>
+                <div *ngIf="showBilletes" class="text-yellow-700 font-semibold">
+                    <div *ngIf="billetes.monedas > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $1 </p>
+                        <p> {{ billetes.monedas }} {{ billetes.monedas > 1 ? 'monedas' : 'moneda'}} </p>
+                        <p> ${{ (billetes.monedas * 1) | moneda }} </p>
+                    </div>
+                    <div *ngIf="billetes.cinco > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $5 </p>
+                        <p> {{ billetes.cinco }} {{ billetes.cinco > 1 ? 'billetes' : 'billete'}} </p>
+                        <p> ${{ (billetes.cinco * 5) | moneda }} </p>
+                    </div>
+                    <div *ngIf="billetes.diez > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $10 </p>
+                        <p> {{ billetes.diez }} {{ billetes.diez > 1 ? 'billetes' : 'billete'}} </p>
+                        <p> ${{ (billetes.diez * 10) | moneda }} </p>
+                    </div>
+                    <div *ngIf="billetes.veinte > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $20 </p>
+                        <p> {{ billetes.veinte }} {{ billetes.veinte > 1 ? 'billetes' : 'billete'}} </p>
+                        <p> ${{ (billetes.veinte * 20) | moneda }} </p>
+                    </div>
+                    <div *ngIf="billetes.cincuenta > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $50 </p>
+                        <p> {{ billetes.cincuenta }} {{ billetes.cincuenta > 1 ? 'billetes' : 'billete'}} </p>
+                        <p> ${{ (billetes.cincuenta * 50) | moneda }} </p>
+                    </div>
+                    <div *ngIf="billetes.cien > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $100 </p>
+                        <p> {{ billetes.cien }} {{ billetes.cien > 1 ? 'billetes' : 'billete'}} </p>
+                        <p> ${{ (billetes.cien * 100) | moneda }} </p>
+                    </div>
+                    <div *ngIf="billetes.doscientos > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $200 </p>
+                        <p> {{ billetes.doscientos }} {{ billetes.doscientos > 1 ? 'billetes' : 'billete'}} </p>
+                        <p> ${{ (billetes.doscientos * 200) | moneda }} </p>
+                    </div>
+                    <div *ngIf="billetes.quinientos > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $500 </p>
+                        <p> {{ billetes.quinientos }} {{ billetes.quinientos > 1 ? 'billetes' : 'billete'}} </p>
+                        <p> ${{ (billetes.quinientos * 500) | moneda }} </p>
+                    </div>
+                    <div *ngIf="billetes.mil > 0" class="p-4 bg-yellow-100 flex items-center justify-between border border-yellow-200">
+                        <p> $1000 </p>
+                        <p> {{ billetes.mil }} {{ billetes.mil > 1 ? 'billetes' : 'billete'}} </p>
+                        <p> ${{ (billetes.mil * 1000) | moneda }} </p>
+                    </div>
+                </div>
+                <p [ngClass]="{'text-green-700 bg-green-100 border-green-200' : cajaSeleccionada.diferencia >= 0, 'text-red-700 bg-red-100 border-red-200' : cajaSeleccionada.diferencia < 0}" class="font-semibold border p-2 flex items-center justify-between mt-2">
+                    <span> Diferencia </span>
+                    <span> ${{ cajaSeleccionada.diferencia | moneda}} </span>
+                </p>
+                <p class="font-semibold p-2 border-b flex items-center justify-between bg-gray-100 mt-2">
+                    <span> Tesoreria </span>
+                    <span> ${{ cajaSeleccionada.tesoreria | moneda }} </span>
+                </p>
+                <p class="font-semibold p-2 border-b flex items-center justify-between bg-green-100">
+                    <span> Saldo próxima caja </span>
+                    <span> ${{ (cajaSeleccionada.saldo_proxima_caja ? cajaSeleccionada.saldo_proxima_caja : 0) | moneda }} </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

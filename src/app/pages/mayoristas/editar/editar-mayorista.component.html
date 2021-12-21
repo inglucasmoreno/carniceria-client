@@ -1,0 +1,103 @@
+<div class="p-4 lg:flex">
+    <div class="bg-white w-full lg:w-1/2 shadow rounded border-t-8 border-gray-800">
+        <div>
+
+            <!-- Encabezado de formulario -->
+            <app-encabezado-formulario titulo="Mayoristas" subTitulo="Editando" dirRegresar="/dashboard/mayoristas"></app-encabezado-formulario>
+
+            <!-- Cuerpo de formulario -->
+            <form [formGroup]="mayoristaForm" class="px-5 pb-5">
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Razón Social </div>
+                        <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                            <input placeholder="Ej. Equinoccio Technology" formControlName="razon_social" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> CUIT </div>
+                        <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                            <input placeholder="Ej. 24340603989" formControlName="cuit" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-bold mt-3 text-gray-600 text-sm"> Domicilio </div>
+                        <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                            <input placeholder="No es obligatorio" formControlName="domicilio" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-bold mt-3 text-gray-600 text-sm"> Telefóno </div>
+                        <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                            <input placeholder="Ej. 24340603989" formControlName="telefono" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Condición frente al IVA </div>
+                        <div class="bg-white my-2 flex">
+                            <select formControlName="condicion_iva" class="border rounded p-1 py-2 w-full shadow text-sm">
+                                    <option value="IVA Responsable Inscripto"> IVA Responsable Inscripto </option>
+                                    <option value="IVA Responsable no Inscripto"> IVA Responsable no Inscripto </option>
+                                    <option value="IVA no Responsable"> IVA no Responsable </option>
+                                    <option value="IVA Sujeto Exento"> IVA Sujeto Exento </option>
+                                    <option value="Consumidor Final"> Consumidor Final </option>
+                                    <option value="Responsable Monotributo"> Responsable Monotributo </option>
+                                    <option value="Sujeto no Categorizado"> Sujeto no Categorizado </option>
+                                    <option value="Proveedor del Exterior"> Proveedor del Exterior </option>
+                                    <option value="Cliente del Exterior"> Cliente del Exterior </option>
+                                    <option value="IVA Liberado"> IVA Liberado </option>
+                                    <option value="IVA Responsable Inscripto – Agente de Percepción"> IVA Responsable Inscripto – Agente de Percepción </option>
+                                    <option value="Pequeño Contribuyente Eventual"> Pequeño Contribuyente Eventual </option>
+                                    <option value="Monotributista Social"> Monotributista Social </option>
+                                    <option value="Pequeño Contribuyente Eventual Social"> Pequeño Contribuyente Eventual Social </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Estado </div>
+                        <div class="bg-white my-2 flex">
+                            <select formControlName="activo" class="border rounded p-1 py-2 w-full shadow text-sm">
+                                <option value=true> Activo </option>
+                                <option value=false> Inactivo </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="w-full lg:w-1/2 border-t-8 shadow border-gray-800 rounded mt-2 lg:mt-0 lg:ml-2 bg-white h-full p-4">
+        <div class="flex">
+            <img class="bg-blue-100 w-32 h-32 rounded-full shadow" src="assets/img/mayoristas/mayorista.png" alt="Mayorista">
+            <div class="ml-4">
+                <div>
+                    <p *ngIf="mayoristaForm.value.razon_social.trim() !== ''" class="text-xl font-semibold text-gray-700"> {{ mayoristaForm.value.razon_social.toUpperCase() }} </p>
+                    <p *ngIf="mayoristaForm.value.razon_social.trim() === ''" class="text-xl text-gray-400"> Razón social </p>
+                </div>
+                <div>
+                    <p *ngIf="mayoristaForm.value.cuit.trim() !== ''" class="text-sm text-gray-600"> <span class="font-semibold"> CUIT </span> {{ mayoristaForm.value.cuit.trim() }} </p>
+                    <p *ngIf="mayoristaForm.value.cuit.trim() === ''" class="text-sm text-gray-400"> CUIT </p>
+                </div>
+                <div>
+                    <p *ngIf="mayoristaForm.value.telefono.trim() !== ''" class="text-sm text-gray-600"> <span class="font-semibold"> Teléfono </span> {{ mayoristaForm.value.telefono.trim() }} </p>
+                    <p *ngIf="mayoristaForm.value.telefono.trim() === ''" class="text-sm text-gray-400"> Teléfono </p>
+                </div>
+                <div>
+                    <p *ngIf="mayoristaForm.value.domicilio.trim() !== ''" class="text-sm text-gray-600"> <span class="font-semibold"> Domicilio </span> {{ mayoristaForm.value.domicilio.trim().toUpperCase() }} </p>
+                    <p *ngIf="mayoristaForm.value.domicilio.trim() === ''" class="text-sm text-gray-400"> Domicilio </p>
+                </div>
+                <div>
+                    <p *ngIf="mayoristaForm.value.condicion_iva.trim() !== ''" class="text-md text-gray-600 text-sm font-semibold"> {{ mayoristaForm.value.condicion_iva.trim() }} </p>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col lg:flex-row mt-2">
+            <div class="w-full mx-2 flex-1">
+                <app-boton-formulario (click)="actualizarMayorista()">
+                    Actualizar mayorista
+                </app-boton-formulario>
+            </div>
+        </div>
+    </div>
+
+</div>

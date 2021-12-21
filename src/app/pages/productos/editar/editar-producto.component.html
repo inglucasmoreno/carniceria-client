@@ -1,0 +1,128 @@
+<app-tarjeta-formulario>
+    <div>
+        <div class="p-4">
+            <h1 class="flex items-center text-gray-700">
+                <app-boton-regresar [routerLink]="['/dashboard/productos/detalle', productoId]"></app-boton-regresar>
+                <div class="flex flex-col ml-2">
+                    <span class="ml-2 text-xl text-gray-600"> Productos </span>
+                    <span class="text-xs mt-1 ml-1 w-max font-semibold border border-gray-200 py-1 px-2 rounded text-white bg-secondary-800"> 
+                        Editando
+                    </span>
+                </div>
+            </h1>
+        </div>
+        <form [formGroup]="productoForm" class="px-5 pb-2">
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Tipo de producto </div>
+                    <div class="bg-white my-2 flex">
+                        <select formControlName="tipo" #txtTipo (change)="cambioTipo(txtTipo.value)" class="border border-gray-300 rounded p-1 py-2 w-full shadow text-sm">
+                            <option value="Normal"> Mercaderia </option>
+                            <option value="Balanza"> Balanza </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Estado </div>
+                    <div class="bg-white my-2 flex">
+                        <select formControlName="activo" formControlName="activo" class="border border-gray-300 rounded p-1 py-2 w-full shadow text-sm">
+                            <option value=true> Activo </option>
+                            <option value=false> Inactivo </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Código </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input placeholder="Ej. 2000007" [maxlength]="digitos" formControlName="codigo" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Descripción </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input placeholder="Ej. Carne molida" formControlName="descripcion" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Unidad de medida </div>
+                    <div class="bg-white my-2 flex">
+                        <select formControlName="unidad_medida" class="border rounded p-1 py-2 w-full shadow text-sm">
+                            <option *ngFor="let unidad of unidades | filtroUnidadMedida:'':'true'" [value]="unidad._id"> {{ unidad.descripcion }} </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm">
+                        Stock actual
+                    </div>
+                    <input formControlName="cantidad" placeholder="Ej. 30.5" type="number" class="focus:outline-none w-full my-2 px-3 py-2 flex border border-gray-300 rounded shadow text-sm">
+                    <!-- {{ producto.tipo === 'Normal' ? producto.cantidad : producto.cantidad.toFixed(2) }} -->
+                    <!-- <div class="bg-gray-100 my-2 px-3 py-2 flex border border-gray-300 rounded shadow text-sm">
+                        {{ producto.tipo === 'Normal' ? producto.cantidad : producto.cantidad.toFixed(2) }}
+                    </div> -->
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> ¿Stock mínimo? </div>
+                    <div class="bg-white my-2 flex">
+                        <select (change)="stockMinimo = !stockMinimo" formControlName="stock_minimo" class="border rounded p-1 py-2 w-full shadow text-sm">
+                            <option value=false> No </option>
+                            <option value=true> Si </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Stock mínimo </div>
+                    <div *ngIf="stockMinimo" class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input type="number" formControlName="cantidad_minima" placeholder="Ej. 20" min="0" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
+                    <div *ngIf="!stockMinimo" class="border shadow p-2 my-2 text-gray-500 rounded bg-gray-100 text-sm">
+                        Sin stock mínimo
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> {{ tipo === 'Normal' ? 'Precio de costo ($)' : 'Precio de venta ($)' }} </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input (change)="actualizarPrecioVenta()" (keyup)="actualizarPrecioVenta()" type="number" formControlName="precio_costo" placeholder="Ej. 2500" step="1" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                </div>
+                <div class="w-full mx-2 flex-1">
+                    <div *ngIf="tipo === 'Normal'" class="w-full flex-1 svelte-1l8159u">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Precio de venta ($) </div>
+                        <div class="my-2 p-1 flex border border-gray-300 rounded shadow bg-gray-100">
+                            <div class="text-sm p-1 font-semibold text-gray-700"> ${{ precio_venta | moneda }} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="tipo === 'Balanza'" class="w-full flex-1 svelte-1l8159u">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Carne </div>
+                        <div class="bg-white my-2 flex">
+                            <select class="border border-gray-300 rounded p-1 py-2 w-full shadow text-sm" formControlName="carne">
+                                <option value='false'> No </option>
+                                <option value='true'> Si </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="tipo === 'Normal'" class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Porcentaje de ganancia (%) </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input (change)="actualizarPrecioVenta()" (keyup)="actualizarPrecioVenta()" type="number" placeholder="Ej. 40" formControlName="porcentaje_ganancia" step="1" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                </div>
+                <div class="w-full mx-2 flex-1"></div>
+            </div>
+        </form>
+        <div class="flex flex-col lg:flex-row px-5 pb-5">
+            <div class="w-full mx-2 flex-1">
+                <app-boton-formulario (click)="editarProducto()"> Actualizar producto </app-boton-formulario>
+            </div>
+            <div class="w-full mx-2 flex-1">
+                <app-boton-formulario [routerLink]="['/dashboard/productos/detalle', productoId]"> Regresar </app-boton-formulario>
+            </div>
+        </div>
+    </div>
+</app-tarjeta-formulario>
