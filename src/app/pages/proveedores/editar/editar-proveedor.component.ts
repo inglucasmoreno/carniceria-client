@@ -5,6 +5,7 @@ import { Proveedor } from 'src/app/models/proveedor.model';
 import { AlertService } from 'src/app/services/alert.service';
 import { DataService } from 'src/app/services/data.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
+import gsap from 'gsap';
 
 @Component({
   selector: 'app-editar-proveedor',
@@ -33,6 +34,7 @@ export class EditarProveedorComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+    gsap.from(".gsap-intro", { duration: 0.3, y: -20, opacity: 0.2 });
     this.dataService.ubicacionActual = 'Dashboard - Proveedores - Editando';
     this.alertService.loading();
     this.activatedRoute.params.subscribe(({ id }) => {

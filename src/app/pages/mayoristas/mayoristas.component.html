@@ -1,15 +1,22 @@
 <app-tarjeta-lista>
     <div class="antialiased font-sans bg-white">
-        <div class="container mx-auto px-4 sm:px-8">
-            <div class="py-4">
-                <div>
-                    <h2 class="text-2xl font-semibold leading-tight text-gray-600">
-                        Lista de mayoristas
-                    </h2>
-                    <p class="text-gray-500"> Total de mayoristas: {{ total }} </p>
+        <div class="container mx-auto">
+            <div>
+                <div class="flex items-center justify-between bg-primary-800 text-white pb-3 px-4">
+                    <div>
+                        <h2 class="text-2xl leading-tight">
+                            Listado de mayoristas
+                        </h2>
+                        <p> Total de mayoristas: {{ total }} </p>
+                    </div>
+                    <app-boton-generico title="Nuevo mayorista" routerLink="nuevo">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </app-boton-generico>
                 </div>
                 <div class="md:flex md:items-center md:justify-between">
-                    <div class="md:flex md:items-center md:justify-between">
+                    <div class="md:flex md:items-center md:justify-between px-4 pt-1">
                         <div class="my-2 flex sm:flex-row flex-col">
                             <div class="flex flex-row mb-1 sm:mb-0">
                                 <div class="relative">
@@ -40,13 +47,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center">
-                        <!-- <app-boton-reportes (click)="generarReporte()"></app-boton-reportes> -->
-                        <app-boton-generico routerLink="nuevo"> Nuevo mayorista </app-boton-generico>
-                    </div>
                 </div>
-                <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-                    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                <div class="px-4 pb-2 overflow-x-auto">
+                    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden border">
                         <table class="min-w-full leading-normal">
                             <thead>
                                 <tr>
@@ -104,7 +107,7 @@
                                 <tr class="animate__animated animate__fadeIn" *ngFor="let mayorista of mayoristas | filtroMayoristas:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                     <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap">
-                                            <img class="rounded-full bg-blue-100 shadow w-10 h-10" src="assets/img/mayoristas/mayorista.png" alt="Mayorista">
+                                            <img class="rounded-full bg-blue-100 border border-blue-200 shadow w-10 h-10" src="assets/img/mayoristas/mayorista.png" alt="Mayorista">
                                         </p>
                                     </td>
                                     <td class="px-5 py-2 border-b border-gray-200 text-xs">
@@ -127,7 +130,9 @@
                                     </td>
                                     <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                         <app-boton-tabla title="Editar mayorista" [routerLink]="['/dashboard/mayoristas/editar', mayorista._id]">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                            </svg>
                                         </app-boton-tabla>
                                     </td>
                                 </tr>

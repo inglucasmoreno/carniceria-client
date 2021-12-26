@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import gsap from 'gsap';
 
 @Component({
   selector: 'app-tarjeta-lista',
@@ -10,6 +11,8 @@ export class TarjetaListaComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    gsap.from(".gsap-intro", { duration: 0.3, y: -20, opacity: 0.2 });
+  }
 
 }

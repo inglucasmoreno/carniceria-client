@@ -8,10 +8,11 @@ import { ProductosService } from './productos.service';
 })
 export class DataService {
   
-  ubicacionActual: string = 'Dashboard';
-  promocionesAlert = false;
-  stockAlert = false;
-  totalCuentaCorriente = 0;
+  public ubicacionActual: string = 'Dashboard';
+  public showMenu: Boolean = true;                 // Header - Controla la visualizacion de la barra de navegacion
+  public promocionesAlert = false;
+  public stockAlert = false;
+  public totalCuentaCorriente = 0;
   
   constructor(private productosService: ProductosService,
               private authService: AuthService,

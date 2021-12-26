@@ -12,18 +12,14 @@ module.exports = {
     },
     darkMode: 'class', // or 'media' or 'class'
     theme: {
-        extend: {},
-        colors: {
-            white: colors.white,
-            gray: colors.gray,
-            green: colors.green,
-            orange: colors.orange,
-            red: colors.red,
-            blue: colors.blue,
-            yellow: colors.yellow,
-            background: colors.gray,
-            primary: colors.gray,
-            secondary: colors.red,
+        extend: {
+            colors: {
+                primary: colors.gray,
+                secondary: colors.red,
+                primaryColor: "#79222a",
+                secondaryColor: "#79222a",
+                orange: colors.orange
+            }
         },
     },
     variants: {

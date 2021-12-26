@@ -74,8 +74,8 @@ const routes: Routes = [
             { path: 'productos/alerta-stock', canActivate: [AdminGuard], component: AlertaStockComponent},
         
             // Ingresos
-            { path: 'ingresos', canActivate: [AdminGuard], component: IngresosComponent},
-            { path: 'ingresos/detalles/:id', canActivate: [AdminGuard], component: IngresoDetallesComponent},
+            { path: 'ingresos', canActivate: [], component: IngresosComponent},
+            { path: 'ingresos/detalles/:id', canActivate: [], component: IngresoDetallesComponent},
 
             // Unidad de medida
             { path: 'unidad_medida', canActivate: [AdminGuard], component: UnidadMedidaComponent},

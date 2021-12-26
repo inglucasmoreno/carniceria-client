@@ -10,27 +10,18 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
-  // Dropdown
-  public showUsuarios = false;
-
-  public showMenu = true;
-  public openAdmin = true;
+  public showAdminOptions = false;
+  public showProductosOptions = false;
+  public showReportesOptions = false;
 
   constructor( public authService: AuthService,
                public dataService: DataService ) { }
 
-  ngOnInit(): void {
-    this.dataService.calcularTotalCuentaCorriente();
-  }
+  ngOnInit(): void {}
 
   // Metodo: Cerrar sesion
   logout(): void{
     this.authService.logout();
-  }
-
-  // Metodo
-  toggleMenu(): void{
-    this.showMenu ? this.showMenu = false : this.showMenu = true;
   }
 
 }

@@ -6,6 +6,8 @@ import { UnidadMedida } from '../../models/unidad-medida.model';
 import { UnidadMedidaService } from '../../services/unidad-medida.service';
 import { AlertService } from 'src/app/services/alert.service';
 
+import gsap from 'gsap';
+
 @Component({
   selector: 'app-unidad-medida',
   templateUrl: './unidad-medida.component.html',
@@ -40,6 +42,7 @@ export class UnidadMedidaComponent implements OnInit {
               ) { }
 
   ngOnInit(): void {
+    gsap.from(".gsap-intro", { duration: 0.3, y: -20, opacity: 0.2 });
     this.dataService.ubicacionActual = 'Dashboard - Unidad de medida'
     this.alertService.loading();
     this.listarUnidades(); 

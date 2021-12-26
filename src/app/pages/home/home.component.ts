@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { environment } from '../../../environments/environment';
-import Swal from 'sweetalert2';
+import gsap from 'gsap';
 
 @Component({
   selector: 'app-home',
@@ -10,13 +9,11 @@ import Swal from 'sweetalert2';
   ]
 })
 export class HomeComponent implements OnInit {
-
-  public dirManual = environment.url_manual;
   
-  constructor(private dataService: DataService) { }
-
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
+    gsap.from(".gsap-intro", { duration: 0.2, y: -100, opacity: 0.2 });
     this.dataService.ubicacionActual = 'Dashboard - Home';
   }
 

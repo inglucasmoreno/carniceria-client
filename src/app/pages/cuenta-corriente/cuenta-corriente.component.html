@@ -1,13 +1,18 @@
 <app-modal [showModal]="showDetalles">
     <div>
-        <div class="flex items-center justify-between text-white px-2 py-1 bg-gray-800 rounded-t">
+        <div class="flex items-center justify-between text-white px-3 py-2 bg-primary-800 rounded-t">
             <h1 class="font-semibold"> Detalles de ingreso </h1>
             <svg (click)="showDetalles = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div class="p-2">
             <div *ngIf="elementoSeleccionado.createdAt" class="p-2 flex items-center justify-between">
-                <p class="rounded"> Fecha de ingreso: <span class="font-semibold"> {{ elementoSeleccionado.createdAt | fecha }} </span> </p>
-                <p class="w-max bg-yellow-100 rounded border border-gray-400 p-1 ml-2"> Monto total:
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    <p class="rounded ml-1"> Fecha de ingreso: <span class="font-semibold"> {{ elementoSeleccionado.createdAt | fecha }} </span> </p>
+                </div>
+                <p class="w-max bg-secondaryColor text-white rounded p-2 ml-2"> Monto total:
                     <span class="font-semibold">
                         ${{ elementoSeleccionado.total | moneda }} 
                     </span>
@@ -26,21 +31,32 @@
     </div>
 </app-modal>
 <app-tarjeta-lista>
-    <div class="container mx-auto px-4 sm:px-8">
-        <div class="py-4">
-            <div class="flex items-center">
-                <app-boton-regresar *ngIf="authService.usuario.role === 'ADMIN_ROLE'" routerLink="/dashboard/usuarios" class="mr-2"></app-boton-regresar>
-                <div>
-                    <h2 class="text-2xl font-semibold leading-tight text-gray-700">
-                        Cuenta corriente
-                    </h2>
-                    <div class="flex items-center text-gray-700 bg-gray-100 w-max p-1 mt-1 border border-gray-300 rounded">
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <p class="font-semibold text-xs ml-1 mt-1"> {{ usuario.apellido }} {{ usuario.nombre }} </p>
+    <div class="container mx-auto">
+        <div>
+            <div class="flex items-center justify-between bg-primary-800 text-white px-4 pb-3">
+                <div class="flex items-center">
+                    <app-boton-regresar *ngIf="authService.usuario.role === 'ADMIN_ROLE'" routerLink="/dashboard/usuarios" class="mr-2"></app-boton-regresar>
+                    <div class="ml-1">
+                        <h2 class="text-2xl leading-tight">
+                            Cuenta corriente
+                        </h2>
+                        <div class="flex items-center w-max text-white rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                              </svg>
+                            <p class="font-semibold text-sm ml-1 mt-1 capitalize"> {{ usuario.apellido.toLowerCase() }} {{ usuario.nombre.toLowerCase() }} </p>
+                        </div>
                     </div>
                 </div>
+                <div *ngIf="authService.usuario.role == 'ADMIN_ROLE'" class="flex items-center">
+                    <app-boton-generico title="Completar listado" (click)="completarListado()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                    </app-boton-generico>
+                </div>
             </div>
-            <div class="md:flex md:items-center md:justify-between mt-2">
+            <div class="md:flex md:items-center md:justify-between mt-2 px-4">
                 <div class="flex items-center">
                     <div class="my-2 flex sm:flex-row flex-col">
                         <div class="flex flex-row mb-1 sm:mb-0">
@@ -58,19 +74,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-2 ml-2 border bg-yellow-100 border-gray-400 rounded text-gray-800">
+                    <div class="p-2 ml-2 border bg-primaryColor rounded text-white">
                         Monto total:
                         <span class="font-semibold">
                             ${{ total | moneda }}
                         </span>
                     </div>
                 </div>
-                <div *ngIf="authService.usuario.role == 'ADMIN_ROLE'" class="flex items-center">
-                    <app-boton-generico (click)="completarListado()"> Completar listado </app-boton-generico>
-                </div>
             </div>
-            <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 pt-2 overflow-x-auto">
-                <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-2 overflow-x-auto">
+                <div class="inline-block min-w-full shadow rounded-lg overflow-hidden border">
                     <table class="min-w-full leading-normal">
                         <thead>
                             <tr>

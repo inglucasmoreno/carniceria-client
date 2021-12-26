@@ -1,41 +1,33 @@
 <div class="p-4 lg:flex">
-    <div class="bg-white w-full lg:w-1/2 shadow rounded border-t-8 border-gray-800">
+    <div class="bg-white w-full lg:w-1/2 shadow rounded border-t-8 border-primary-800">
         <div>
 
             <!-- Encabezado de formulario -->
-            <app-encabezado-formulario titulo="Mayoristas" subTitulo="Editando" dirRegresar="/dashboard/mayoristas"></app-encabezado-formulario>
+            <app-encabezado-formulario titulo="Editando mayorista" dirRegresar="/dashboard/mayoristas"></app-encabezado-formulario>
 
             <!-- Cuerpo de formulario -->
             <form [formGroup]="mayoristaForm" class="px-5 pb-5">
                 <div class="flex flex-col lg:flex-row">
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
                         <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Razón Social </div>
-                        <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                            <input placeholder="Ej. Equinoccio Technology" formControlName="razon_social" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
-                    </div>
+                        <input placeholder="Ej. Equinoccio Technology" formControlName="razon_social" class="p-2 border-b-2 transform duration-500 focus:border-primaryColor appearance-none outline-none w-full text-gray-800 text-sm"></div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
                         <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> CUIT </div>
-                        <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                            <input placeholder="Ej. 24340603989" formControlName="cuit" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
-                    </div>
+                        <input placeholder="Ej. 24340603989" formControlName="cuit" class="p-2 border-b-2 transform duration-500 focus:border-primaryColor appearance-none outline-none w-full text-gray-800 text-sm"></div>
                 </div>
                 <div class="flex flex-col lg:flex-row">
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
                         <div class="font-bold mt-3 text-gray-600 text-sm"> Domicilio </div>
-                        <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                            <input placeholder="No es obligatorio" formControlName="domicilio" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
-                    </div>
+                        <input placeholder="No es obligatorio" formControlName="domicilio" class="p-2 border-b-2 transform duration-500 focus:border-primaryColor appearance-none outline-none w-full text-gray-800 text-sm"></div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
                         <div class="font-bold mt-3 text-gray-600 text-sm"> Telefóno </div>
-                        <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                            <input placeholder="Ej. 24340603989" formControlName="telefono" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
-                    </div>
+                        <input placeholder="Ej. 24340603989" formControlName="telefono" class="p-2 border-b-2 transform duration-500 focus:border-primaryColor appearance-none outline-none w-full text-gray-800 text-sm"></div>
                 </div>
                 <div class="flex flex-col lg:flex-row">
                     <div class="w-full mx-2 flex-1">
                         <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Condición frente al IVA </div>
                         <div class="bg-white my-2 flex">
-                            <select formControlName="condicion_iva" class="border rounded p-1 py-2 w-full shadow text-sm">
+                            <select formControlName="condicion_iva" class="p-2 bg-white border-b-2 transform duration-500 focus:border-primaryColor outline-none w-full text-gray-800 text-sm">
                                     <option value="IVA Responsable Inscripto"> IVA Responsable Inscripto </option>
                                     <option value="IVA Responsable no Inscripto"> IVA Responsable no Inscripto </option>
                                     <option value="IVA no Responsable"> IVA no Responsable </option>
@@ -56,7 +48,7 @@
                     <div class="w-full mx-2 flex-1">
                         <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Estado </div>
                         <div class="bg-white my-2 flex">
-                            <select formControlName="activo" class="border rounded p-1 py-2 w-full shadow text-sm">
+                            <select formControlName="activo" class="p-2 bg-white border-b-2 transform duration-500 focus:border-primaryColor outline-none w-full text-gray-800 text-sm">
                                 <option value=true> Activo </option>
                                 <option value=false> Inactivo </option>
                             </select>
@@ -68,7 +60,7 @@
     </div>
     <div class="w-full lg:w-1/2 border-t-8 shadow border-gray-800 rounded mt-2 lg:mt-0 lg:ml-2 bg-white h-full p-4">
         <div class="flex">
-            <img class="bg-blue-100 w-32 h-32 rounded-full shadow" src="assets/img/mayoristas/mayorista.png" alt="Mayorista">
+            <img class="bg-blue-100 border border-blue-200 w-32 h-32 rounded-full shadow" src="assets/img/mayoristas/mayorista.png" alt="Mayorista">
             <div class="ml-4">
                 <div>
                     <p *ngIf="mayoristaForm.value.razon_social.trim() !== ''" class="text-xl font-semibold text-gray-700"> {{ mayoristaForm.value.razon_social.toUpperCase() }} </p>

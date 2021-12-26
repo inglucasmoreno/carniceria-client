@@ -6,6 +6,7 @@ import { DataService } from 'src/app/services/data.service';
 
 import { Usuario } from '../../models/usuario.model';
 
+
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',

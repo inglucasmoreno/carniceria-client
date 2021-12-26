@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { AlertService } from '../../services/alert.service';
+import gsap from 'gsap';
 
 @Component({
   selector: 'app-nuevo-proveedor',
@@ -29,6 +30,7 @@ export class NuevoProveedorComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+    gsap.from(".gsap-intro", { duration: 0.3, y: -20, opacity: 0.2 });
     this.dataService.ubicacionActual = 'Dashboard - Proveedores - Creando';
   }
   
